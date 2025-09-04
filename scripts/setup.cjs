@@ -1,21 +1,8 @@
 #!/usr/bin/env node
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { homedir } from 'os';
-import { join } from 'path';
-import process from 'process';
-
-// Ensure console is available
-if (typeof console === 'undefined') {
-  // Running in an environment without console
-  const noop = () => {};
-  global.console = {
-    log: noop,
-    error: noop,
-    warn: noop,
-    info: noop
-  };
-}
+const { existsSync, readFileSync, writeFileSync, mkdirSync } = require('fs');
+const { homedir } = require('os');
+const { join } = require('path');
 
 console.log('\n🚀 Setting up Scrivener MCP for Claude Desktop...\n');
 
@@ -73,21 +60,10 @@ if (config.mcpServers.scrivener) {
   console.log('\nCurrent configuration:');
   console.log(JSON.stringify(config.mcpServers.scrivener, null, 2));
   
-  const readline = await import('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  
-  const answer = await new Promise((resolve) => {
-    rl.question('\nDo you want to update the configuration? (y/N): ', resolve);
-  });
-  rl.close();
-  
-  if (answer.toLowerCase() !== 'y') {
-    console.log('\n✨ Setup complete! Restart Claude Desktop to use Scrivener MCP.\n');
-    process.exit(0);
-  }
+  // For CommonJS, we can't use top-level await, so we'll make it simpler
+  console.log('\nTo update the configuration, please run setup again after deleting the current config.');
+  console.log('\n✨ Setup complete! Restart Claude Desktop to use Scrivener MCP.\n');
+  process.exit(0);
 }
 
 // Add scrivener configuration
